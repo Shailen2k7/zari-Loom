@@ -10,3 +10,15 @@
 # so link previews (WhatsApp, Instagram) get a JPEG they can show.
 [images]
   remote_images = ["https://[a-z0-9]+\\.supabase\\.co/storage/v1/object/public/.*"]
+
+# Studio app: the service worker and manifest must always be fresh.
+[[headers]]
+  for = "/studio-sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+    Service-Worker-Allowed = "/admin"
+[[headers]]
+  for = "/studio.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json"
+    Cache-Control = "no-cache"

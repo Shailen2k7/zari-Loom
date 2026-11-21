@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { QuickAdd } from "@/components/admin/QuickAdd";
+import { InstallApp } from "@/components/admin/StudioApp";
 import { aiEnabled } from "@/lib/ai";
 import { inr } from "@/lib/format";
 import { razorpayConfigured } from "@/lib/razorpay";
@@ -32,6 +33,7 @@ export default async function Overview() {
 
   return (
     <div>
+      <InstallApp />
       <header>
         <p className="label text-amber">{new Date().toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long", timeZone: "Asia/Kolkata" })}</p>
         <h1 className="display mt-1 text-[1.9rem] leading-tight sm:text-[2.15rem]">{greeting()}</h1>

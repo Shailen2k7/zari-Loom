@@ -158,6 +158,30 @@ export function QuickAdd({ aiOn }: { aiOn: boolean }) {
     return () => { window.removeEventListener("dragenter", enter); window.removeEventListener("drop", end); window.removeEventListener("dragend", end); };
   }, []);
 
+  // Photos shared into the Studio app (Android share sheet) wait in the service worker's cache: pick them up once.
+  const picked = useRef(false);
+  useEffect(() => {
+    if (picked.current || !("caches" in window)) return;
+    picked.current = true;
+    (async () => {
+      try {
+        const cache = await caches.open("zl-shared");
+        const keys = await cache.keys();
+        if (!keys.length) return;
+        const files: File[] = [];
+        for (const k of keys) {
+          const r = await cache.match(k);
+          if (r) files.push(new File([await r.blob()], decodeURIComponent(r.headers.get("x-name") || "photo.jpg"), { type: r.headers.get("content-type") || "image/jpeg" }));
+          await cache.delete(k);
+        }
+        const url = new URL(window.location.href);
+        if (url.searchParams.has("shared")) { url.searchParams.delete("shared"); history.replaceState(null, "", url.pathname + url.search + url.hash); }
+        document.getElementById("add")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        handle(files);
+      } catch {}
+    })();
+  }, [handle]);
+
   // Paste a photo straight from WhatsApp Web or the clipboard.
   useEffect(() => {
     const onPaste = (e: ClipboardEvent) => {

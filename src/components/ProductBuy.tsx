@@ -21,9 +21,14 @@ export function ProductBuy({ p }: { p: Slim }) {
   useEffect(() => {
     const el = buttons.current;
     if (!el) return;
-    const io = new IntersectionObserver(([e]) => setDock(!e.isIntersecting && e.boundingClientRect.top < 200), { rootMargin: "-130px 0px 0px 0px" });
-    io.observe(el);
-    return () => io.disconnect();
+    // A scroll check, not an observer: a fast fling can jump the buttons from below the screen to above it in one frame.
+    let raf = 0;
+    const check = () => { raf = 0; setDock(el.getBoundingClientRect().bottom < 130); };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(check); };
+    check();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => { cancelAnimationFrame(raf); window.removeEventListener("scroll", onScroll); window.removeEventListener("resize", onScroll); };
   }, []);
 
   const price = p.price;
