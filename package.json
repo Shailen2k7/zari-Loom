@@ -1,0 +1,32 @@
+{
+  "name": "banaras-store",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "images": "node scripts/build-images.mjs",
+    "seed": "tsx --env-file=.env.local scripts/seed.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.12.0",
+    "@supabase/supabase-js": "^2.45.0",
+    "next": "^15.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "server-only": "^0.0.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.1.11",
+    "@types/node": "^20.14.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "sharp": "^0.33.5",
+    "tailwindcss": "4.1.11",
+    "tsx": "^4.23.15",
+    "typescript": "^5.6.0"
+  }
+}

@@ -1,0 +1,355 @@
+@import "tailwindcss";
+
+/* Design system: "Peacock & Marigold".
+   Cool mist paper, deep peacock green, marigold thread accents. Photos are never cropped. */
+@theme {
+  --color-mist: #f3f4f0;
+  --color-card: #ffffff;
+  --color-tint: #e4ebe5;
+  --color-peacock: #0f4443;
+  --color-peacock-dark: #0a3231;
+  --color-deep: #082625;
+  --color-marigold: #e9a23b;
+  --color-amber: #8a5606;
+  --color-ink: #121c1b;
+  --color-muted: #4f5b59;
+  --color-line: #d5dbd4;
+  --color-cream: #f4eedf;
+  --color-rose: #a82e52;
+  --color-wa: #1f7a4d;
+  --color-wa-dark: #175e3b;
+  --font-display: var(--font-display-face), "Times New Roman", serif;
+  --font-sans: var(--font-body-face), system-ui, sans-serif;
+}
+
+/* Height of the top bar + header, measured on load (fallbacks used for the first paint). */
+:root {
+  --chrome: 146px;
+  --strip: 62px;
+}
+@media (min-width: 1024px) {
+  :root {
+    --chrome: 104px;
+  }
+}
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  background: var(--color-mist);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+:focus-visible {
+  outline: 2px solid var(--color-peacock);
+  outline-offset: 3px;
+}
+.on-dark :focus-visible {
+  outline-color: var(--color-marigold);
+}
+::selection {
+  background: var(--color-marigold);
+  color: var(--color-ink);
+}
+
+@layer components {
+  .display {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.06;
+  }
+  .display em,
+  .display i {
+    font-style: italic;
+    font-weight: 500;
+  }
+  .label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 48px;
+    padding: 0.75rem 1.75rem;
+    border-radius: 2px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+    cursor: pointer;
+    text-align: center;
+  }
+  .btn:active {
+    transform: scale(0.98);
+  }
+  .btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+  .btn-primary {
+    background: var(--color-peacock);
+    color: #fff;
+  }
+  .btn-primary:hover {
+    background: var(--color-peacock-dark);
+  }
+  .btn-gold {
+    background: var(--color-marigold);
+    color: var(--color-ink);
+  }
+  .btn-gold:hover {
+    background: #f0b356;
+  }
+  .btn-wa {
+    background: var(--color-wa);
+    color: #fff;
+  }
+  .btn-wa:hover {
+    background: var(--color-wa-dark);
+  }
+  .btn-ghost {
+    border: 1px solid var(--color-peacock);
+    color: var(--color-peacock);
+  }
+  .btn-ghost:hover {
+    background: var(--color-peacock);
+    color: #fff;
+  }
+  .btn-ghost-light {
+    border: 1px solid rgb(244 238 223 / 0.55);
+    color: var(--color-cream);
+  }
+  .btn-ghost-light:hover {
+    background: var(--color-cream);
+    color: var(--color-deep);
+  }
+  .field {
+    width: 100%;
+    min-height: 48px;
+    height: 48px;
+    padding: 0 0.95rem;
+    border: 1px solid var(--color-line);
+    border-radius: 12px;
+    background-color: #fff;
+    font: inherit;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-ink);
+    transition: border-color 0.15s, box-shadow 0.15s, background-color 0.15s;
+  }
+  textarea.field {
+    height: auto;
+    padding: 0.75rem 0.95rem;
+  }
+  .field:hover {
+    border-color: color-mix(in srgb, var(--color-peacock) 45%, var(--color-line));
+  }
+  .field:focus {
+    border-color: var(--color-peacock);
+    outline: none;
+    box-shadow: 0 0 0 3px rgb(15 68 67 / 0.15);
+  }
+  .field::placeholder {
+    color: var(--color-muted);
+    font-weight: 400;
+  }
+  /* Custom dropdowns: no browser chrome, a slim chevron, a soft tint once a choice is made */
+  select.field {
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    padding-right: 2.5rem;
+    text-overflow: ellipsis;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%230f4443' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.9rem center;
+    background-size: 16px 16px;
+  }
+  select.field[data-on="true"] {
+    border-color: var(--color-peacock);
+    background-color: var(--color-tint);
+    color: var(--color-peacock);
+    font-weight: 600;
+  }
+  input[type="search"].field {
+    padding-left: 2.6rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%236b7470' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: left 0.9rem center;
+    background-size: 18px 18px;
+  }
+  input[type="search"].field::-webkit-search-cancel-button { cursor: pointer; }
+  .field-label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-muted);
+  }
+  /* Marigold "thread" divider: a hairline with a small woven diamond */
+  .thread {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--color-marigold);
+  }
+  .thread::before,
+  .thread::after {
+    content: "";
+    height: 1px;
+    flex: 1;
+    background: currentColor;
+    opacity: 0.6;
+  }
+  .wrap {
+    width: 100%;
+    max-width: 1280px;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 640px) {
+    .wrap {
+      padding-inline: 1.5rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .wrap {
+      padding-inline: 2.5rem;
+    }
+  }
+  /* Even product grid. Every card has the same picture area, so rows line up;
+     the photo inside is scaled to fit whole (never cut) and rests on the bottom edge. */
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.5rem 0.875rem;
+  }
+  @media (min-width: 768px) {
+    .product-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 3rem 1.5rem;
+    }
+  }
+  @media (min-width: 1100px) {
+    .product-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 3.5rem 1.75rem;
+    }
+  }
+  /* Every card has the same 2:3 frame (the shape of most model photos), on a soft mat.
+     A photo of another shape is centred inside it whole, never cut. */
+  .cell {
+    position: relative;
+    aspect-ratio: 2 / 3;
+    background: #ece9e0;
+    overflow: hidden;
+  }
+  /* When every piece in view is a wide flat-lay, use a wider picture area */
+  .product-grid.wide .cell {
+    aspect-ratio: 4 / 3;
+  }
+  .fit {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: 50% 50%;
+    transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  a:hover > .fit,
+  a:hover .fit {
+    transform: scale(1.03);
+  }
+  /* Woven zari border: a repeating diamond-and-dot band in marigold */
+  .zari-border {
+    height: 14px;
+    background: var(--color-deep)
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='14' viewBox='0 0 28 14'%3E%3Cpath d='M0 1.5h28M0 12.5h28' stroke='%23e9a23b' stroke-width='1'/%3E%3Cpath d='M14 3.5 17.5 7 14 10.5 10.5 7Z' fill='%23e9a23b'/%3E%3Ccircle cx='1' cy='7' r='1' fill='%23e9a23b'/%3E%3Ccircle cx='27' cy='7' r='1' fill='%23e9a23b'/%3E%3C/svg%3E")
+      repeat-x center / 28px 14px;
+  }
+  .photo {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 3px;
+    background: var(--color-tint);
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rise {
+  animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+.shimmer {
+  background: linear-gradient(90deg, #e9ece6 0%, #f6f7f3 40%, #e9ece6 80%) 0 0 / 200% 100%;
+  animation: shimmer 1.2s linear infinite;
+}
+/* A gold line sweeping over the photo while the AI reads it */
+@keyframes scan {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+.ai-scan {
+  background: linear-gradient(180deg, transparent 0%, rgb(233 162 59 / 0) 40%, rgb(233 162 59 / 0.45) 50%, rgb(233 162 59 / 0) 60%, transparent 100%);
+  animation: scan 1.6s ease-in-out infinite alternate;
+}
+@keyframes sheet-in {
+  from {
+    transform: translateX(40px);
+    opacity: 0;
+  }
+}
+.sheet {
+  animation: sheet-in 0.28s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee {
+  animation: marquee 38s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rise,
+  .marquee {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
