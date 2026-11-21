@@ -8,7 +8,7 @@ import { WishButton } from "@/components/WishButton";
 import { categories, delivery, site } from "@/config/site";
 import { inr, mediaSrc, stockLabel } from "@/lib/format";
 import { getProduct, listProducts, listWeavers } from "@/lib/store";
-import { codeFromParam, JsonLd, productDescription, productHref, productJsonLd, productTitle } from "@/lib/seo";
+import { codeFromParam, shareImage, JsonLd, productDescription, productHref, productJsonLd, productTitle } from "@/lib/seo";
 
 export const revalidate = 60;
 type Props = { params: Promise<{ code: string }> };
@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!p) return { title: "Not found", robots: { index: false } };
   const title = productTitle(p);
   const description = productDescription(p).slice(0, 158);
-  const image = p.media[0] ? [{ url: mediaSrc(p.media[0], 1200), width: Math.min(1200, p.media[0].width), alt: `${p.name} in ${p.colour}` }] : [];
+  const image = p.media[0] ? [{ url: shareImage(mediaSrc(p.media[0], 1200)), width: Math.min(1200, p.media[0].width), alt: `${p.name} in ${p.colour}` }] : [];
   return {
     title,
     description,
@@ -78,7 +78,7 @@ export default async function ProductPage({ params }: Props) {
           )}
           <p className="mt-5 leading-relaxed text-muted">{p.description}</p>
           <div className="my-7 h-px bg-line" />
-          <ProductBuy p={{ code: p.code, name: p.name, price: p.price, stock: p.stock, category: p.category }} />
+          <ProductBuy p={{ code: p.code, name: p.name, price: p.price, stock: p.stock, category: p.category, colour: p.colour, weave: p.weave, media: p.media.slice(0, 1) }} />
 
           <div className="mt-8 divide-y divide-line border-y border-line">
             {[

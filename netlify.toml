@@ -5,3 +5,8 @@
 
 [build.environment]
   NODE_VERSION = "22"
+
+# Lets Netlify's image service convert product photos stored in Supabase,
+# so link previews (WhatsApp, Instagram) get a JPEG they can show.
+[images]
+  remote_images = ["https://[a-z0-9]+\\.supabase\\.co/storage/v1/object/public/.*"]

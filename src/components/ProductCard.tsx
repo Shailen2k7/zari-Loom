@@ -1,14 +1,12 @@
 import { productHref } from "@/lib/seo";
 import Link from "next/link";
 import { categories } from "@/config/site";
-import { cardMedia, inr, stockLabel, waLink } from "@/lib/format";
+import { cardMedia, inr, stockLabel } from "@/lib/format";
 import type { Product } from "@/lib/types";
+import { BuyOnWhatsApp } from "./BuyOnWhatsApp";
 import { WhatsApp } from "./Icons";
 import { Photo } from "./Photo";
 import { WishButton } from "./WishButton";
-
-export const buyMessage = (p: Pick<Product, "name" | "code" | "price">) =>
-  `Hi! I would like to buy ${p.name} (code ${p.code}), ${inr(p.price)}. Is it still available?`;
 
 export function ProductCard({ p, priority = false }: { p: Product; priority?: boolean }) {
   const cat = categories.find((c) => c.slug === p.category)?.singular ?? "";
@@ -32,10 +30,10 @@ export function ProductCard({ p, priority = false }: { p: Product; priority?: bo
           <span className="text-[0.95rem] font-semibold">{inr(p.price)}</span>
           {p.stock <= 3 && <span className="text-xs font-medium text-rose">{stockLabel(p.stock)}</span>}
         </p>
-        <a href={waLink(buyMessage(p))} target="_blank" rel="noopener noreferrer"
+        <BuyOnWhatsApp p={{ code: p.code, name: p.name, category: p.category, colour: p.colour, weave: p.weave, price: p.price, media: cardMedia(p) ? [cardMedia(p)!] : [] }}
           className="inline-flex min-h-11 items-center gap-1.5 self-start text-sm font-semibold text-wa underline-offset-4 hover:underline">
           <WhatsApp width={16} height={16} /> Buy on WhatsApp
-        </a>
+        </BuyOnWhatsApp>
       </div>
     </article>
   );

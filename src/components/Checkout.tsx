@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { delivery, site } from "@/config/site";
 import { inr, mediaSrc, waLink } from "@/lib/format";
+import { orderMessage } from "@/lib/whatsapp";
 import { isNoida, totals } from "@/lib/pricing";
 import type { Media, PaymentMethod, Product } from "@/lib/types";
 import { useShop } from "./Shop";
@@ -259,13 +260,13 @@ export function Checkout({ payments }: { payments: "razorpay" | "test" | "off" }
               </div>
               <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row">
                 <button type="button" className="btn btn-ghost" onClick={() => setStep(1)}>Back</button>
-                <a className="btn btn-primary" target="_blank" rel="noopener noreferrer" href={waLink([
-                  "Hi! I would like to order:",
-                  ...lines.filter((x) => x.p).map((x) => `• ${x.p!.name} (code ${x.p!.code}) × ${x.l.qty}, ${inr(x.unit * x.l.qty)}`),
-                  `Total ${inr(t.total)}${applied ? ` with offer ${applied}` : ""}`,
-                  `Name: ${d.name}, ${d.phone}`,
-                  `Address: ${[d.tower, d.society, d.line1, d.city, d.pincode].filter(Boolean).join(", ")}`,
-                ].join("\n"))}>Send order on WhatsApp · {inr(t.total)}</a>
+                <a className="btn btn-primary" target="_blank" rel="noopener noreferrer" href={waLink(orderMessage({
+                  items: lines.filter((x) => x.p).map((x) => ({ p: x.p!, qty: x.l.qty, amount: x.unit * x.l.qty })),
+                  subtotal: t.subtotal, discount: t.discount, offer: applied, shipping: t.shipping, total: t.total,
+                  name: d.name, phone: d.phone, email: d.email,
+                  address: [d.tower, d.society, d.line1, d.city, d.pincode].filter(Boolean).join(", "),
+                  delivery: slot,
+                }, window.location.origin))}>Send order on WhatsApp · {inr(t.total)}</a>
               </div>
             </div>
           )}

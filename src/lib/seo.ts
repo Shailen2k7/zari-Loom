@@ -7,6 +7,12 @@ import type { Product } from "./types";
 
 export const absolute = (path: string) => new URL(path, site.url).toString();
 
+/** A JPEG link-preview image. On the live site Netlify converts the WebP photo, since WhatsApp does not show WebP previews. */
+export function shareImage(src: string, width = 1200) {
+  if (!site.url.startsWith("https://")) return src;
+  return absolute(`/.netlify/images?url=${encodeURIComponent(src)}&w=${width}&fm=jpg&q=80`);
+}
+
 export const slugify = (s: string) =>
   s.toLowerCase().normalize("NFKD").replace(/[^\w\s-]/g, "").trim().replace(/[\s_]+/g, "-").replace(/-+/g, "-");
 

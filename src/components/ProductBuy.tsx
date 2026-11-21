@@ -2,12 +2,13 @@
 import Link from "next/link";
 import { useState } from "react";
 import { delivery } from "@/config/site";
-import { inr, waLink } from "@/lib/format";
-import type { Product } from "@/lib/types";
+import { inr } from "@/lib/format";
+import type { Media, Product } from "@/lib/types";
+import { BuyOnWhatsApp } from "./BuyOnWhatsApp";
 import { Check, Truck, WhatsApp } from "./Icons";
 import { useShop } from "./Shop";
 
-type Slim = Pick<Product, "code" | "name" | "price" | "stock" | "category">;
+type Slim = Pick<Product, "code" | "name" | "price" | "stock" | "category" | "colour" | "weave"> & { media: Media[] };
 
 export function ProductBuy({ p }: { p: Slim }) {
   const { bag, addToBag } = useShop();
@@ -19,8 +20,6 @@ export function ProductBuy({ p }: { p: Slim }) {
   const inBag = bag.filter((l) => l.code === p.code).reduce((s, l) => s + l.qty, 0);
   const soldOut = p.stock <= 0;
   const maxed = inBag >= p.stock;
-
-  const msg = `Hi! I would like to buy ${p.name} (code ${p.code}), ${inr(price)}. Is it still available?`;
 
   function checkPin(e: React.FormEvent) {
     e.preventDefault();
@@ -44,7 +43,7 @@ export function ProductBuy({ p }: { p: Slim }) {
             <Check width={18} height={18} /> In your bag. <Link href="/bag" className="underline underline-offset-4">Go to bag</Link>
           </p>
         )}
-        <a href={waLink(msg)} target="_blank" rel="noopener noreferrer" className="btn btn-wa w-full"><WhatsApp /> Buy on WhatsApp</a>
+        <BuyOnWhatsApp p={p} className="btn btn-wa w-full"><WhatsApp /> Buy on WhatsApp</BuyOnWhatsApp>
       </div>
 
       <form onSubmit={checkPin} className="mt-7 rounded-lg border border-line bg-white p-4">
