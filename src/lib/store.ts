@@ -250,6 +250,27 @@ export async function addProductMedia(code: string, m: Media) {
   writeDb(db);
 }
 
+/** Set a piece's photos to exactly this list, in this order (first one is the cover). Photos left out are removed from the piece. */
+export async function setProductMedia(code: string, media: Media[]) {
+  if (usingSupabase) {
+    const row = check(await sb().from("products").select("id, product_media(id, url)").eq("code", code).single()) as
+      { id: string; product_media: { id: string; url: string }[] };
+    const keep = new Map(media.map((m, i) => [m.url, i]));
+    const drop = row.product_media.filter((r) => !keep.has(r.url)).map((r) => r.id);
+    if (drop.length) check(await sb().from("product_media").delete().in("id", drop));
+    for (const r of row.product_media) {
+      const sort = keep.get(r.url);
+      if (sort !== undefined) check(await sb().from("product_media").update({ sort }).eq("id", r.id));
+    }
+    return;
+  }
+  const db = readDb();
+  const p = db.products.find((x) => x.code === code);
+  if (!p) throw new Error("Product not found");
+  p.media = media;
+  writeDb(db);
+}
+
 /** Take stock for an order. Returns false (and takes nothing) if any piece is short. */
 export async function takeStock(items: { code: string; qty: number }[]): Promise<boolean> {
   if (usingSupabase) {

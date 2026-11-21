@@ -71,7 +71,7 @@ export default async function ProductPage({ params }: Props) {
             ))}
             <li className={`rounded-full px-3 py-1.5 font-semibold ${p.stock > 0 ? "bg-deep text-cream" : "bg-rose text-white"}`}>{stockLabel(p.stock)}</li>
           </ul>
-          {weaver && (
+          {weaver && !weaver.placeholder && (
             <p className="mt-4 text-sm text-muted">
               Woven in <span className="font-medium text-ink">{weaver.village}</span>{!weaver.placeholder && <> by <span className="font-medium text-ink">{weaver.name}</span></>}
             </p>
@@ -97,7 +97,7 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </div>
 
-      {weaver && (
+      {weaver && !weaver.placeholder && (
         <section className="mt-16 rounded-xl bg-tint p-6 sm:p-10 md:mt-24">
           <p className="label text-amber">Meet the weaver</p>
           <h2 className="display mt-3 text-4xl sm:text-5xl">{weaver.placeholder ? weaver.village : weaver.name}</h2>

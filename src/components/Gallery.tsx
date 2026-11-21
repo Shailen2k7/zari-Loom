@@ -11,7 +11,7 @@ export function Gallery({ media, name }: { media: Media[]; name: string }) {
   const m = media[i] ?? media[0];
   if (!m) return null;
   return (
-    <div className="flex flex-col-reverse gap-3 md:flex-row md:items-start">
+    <div className="flex flex-col-reverse gap-3 md:flex-row md:items-start lg:sticky lg:top-28 lg:self-start">
       {media.length > 1 && (
         <ul className="no-scrollbar flex gap-2.5 overflow-x-auto md:w-20 md:shrink-0 md:flex-col md:overflow-visible">
           {media.map((t, k) => (
@@ -26,8 +26,12 @@ export function Gallery({ media, name }: { media: Media[]; name: string }) {
         </ul>
       )}
       <div className="min-w-0 flex-1">
-        <div className="mx-auto" style={{ maxWidth: m.height > m.width * 1.6 ? 430 : undefined }}>
-          <Photo key={m.url} m={m} alt={`${name}: ${labels[i] ?? "detail"}`} priority want={1200} sizes="(min-width: 1024px) 640px, 94vw" />
+        {/* Desktop: a stage the height of the screen, photo whole on a soft blurred copy of itself. Phone: the photo at its own shape. */}
+        <div className="relative overflow-hidden rounded-[4px] bg-tint lg:h-[min(calc(100svh-9rem),880px)]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={mediaSrc(m, 200)} alt="" aria-hidden className="fit-fill hidden lg:block" />
+          <Photo key={m.url} m={m} alt={`${name}: ${labels[i] ?? "detail"}`} priority want={1200} sizes="(min-width: 1024px) 640px, 94vw"
+            className="fade-in relative !rounded-none lg:!absolute lg:inset-0 lg:!h-full lg:!w-full lg:object-contain !bg-transparent" />
         </div>
       </div>
     </div>

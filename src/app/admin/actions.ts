@@ -152,3 +152,17 @@ export async function quickSave(code: string, f: QuickFields): Promise<{ ok: tru
   revalidatePath("/", "layout");
   return { ok: true, status };
 }
+
+/** Reorder or remove a piece's photos. `urls` is the new order; the first photo becomes the cover. */
+export async function savePhotos(code: string, urls: string[]): Promise<{ ok: true } | { error: string }> {
+  const who = await requireAdmin();
+  const p = await store.getProduct(String(code));
+  if (!p) return { error: "This piece no longer exists." };
+  const byUrl = new Map(p.media.map((m) => [m.url, m]));
+  const next = [...new Set(urls)].map((u) => byUrl.get(u)).filter((m): m is NonNullable<typeof m> => Boolean(m));
+  if (!next.length) return { error: "Keep at least one photo." };
+  await store.setProductMedia(p.code, next);
+  await store.audit(who, "product.photos", `${p.code} ${next.length} photos`);
+  revalidatePath("/", "layout");
+  return { ok: true };
+}

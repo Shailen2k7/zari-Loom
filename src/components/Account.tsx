@@ -46,7 +46,7 @@ export function Account() {
           <h2 id="orders-h" className="display text-3xl">Track an order</h2>
           <form onSubmit={lookup} className="mt-4 rounded-xl bg-white p-5">
             <label className="field-label" htmlFor="o-id">Order ID</label>
-            <input id="o-id" className="field uppercase" required value={id} onChange={(e) => setId(e.target.value)} placeholder="e.g. ZL-123456" />
+            <input id="o-id" className="field uppercase placeholder:normal-case" required value={id} onChange={(e) => setId(e.target.value)} placeholder="e.g. ZL-123456" />
             <label className="field-label mt-4" htmlFor="o-phone">Phone number on the order</label>
             <input id="o-phone" className="field" required inputMode="tel" value={phone} onChange={(e) => setPhone(e.target.value)} />
             <button className="btn btn-primary mt-5" disabled={busy}>{busy ? "Looking..." : "Find my order"}</button>

@@ -9,7 +9,7 @@ import type { Media } from "@/lib/types";
 export function Photo({ m, alt, sizes, priority = false, want = 800, className = "", fit = false }: {
   m: Media; alt: string; sizes: string; priority?: boolean; want?: number; className?: string; fit?: boolean;
 }) {
-  return (
+  const img = (
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src={mediaSrc(m, want)}
@@ -23,5 +23,13 @@ export function Photo({ m, alt, sizes, priority = false, want = 800, className =
       decoding="async"
       className={`${fit ? "fit" : "photo"} ${className}`}
     />
+  );
+  if (!fit) return img;
+  return (
+    <>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={mediaSrc(m, 200)} alt="" aria-hidden loading="lazy" decoding="async" className="fit-fill" />
+      {img}
+    </>
   );
 }

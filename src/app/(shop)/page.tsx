@@ -28,7 +28,7 @@ function Kicker({ children, light = false, center = false }: { children: React.R
 /** A horizontal lookbook rail. Every photo keeps its own shape: fixed height, natural width. */
 function Rail({ items, light = false, caption = true }: { items: Product[]; light?: boolean; caption?: boolean }) {
   return (
-    <div className="no-scrollbar flex snap-x gap-4 overflow-x-auto px-4 pb-3 sm:gap-6 sm:px-6 lg:px-[max(2.5rem,calc((100vw-1280px)/2+2.5rem))]">
+    <div className="rail no-scrollbar flex snap-x gap-4 overflow-x-auto pb-3 sm:gap-6">
       {items.map((p) => (
         <Link key={p.code} href={productHref(p)} className="group shrink-0 snap-start">
           <span className="block overflow-hidden">
@@ -49,7 +49,8 @@ function Rail({ items, light = false, caption = true }: { items: Product[]; ligh
 
 export default async function HomePage() {
   const everything = await listProducts();
-  const all = everything.filter((p) => p.onModel);
+  // Newest first, so a piece added from the dashboard shows at the front of every row.
+  const all = everything.filter((p) => p.onModel).sort((a, b) => Number(b.code) - Number(a.code));
 
   const heroMain = byPhoto(all, "n04") ?? all[0];
   // Hero looks: pairs of 2:3 model photos (a saree with an Anarkali or a set).
@@ -125,9 +126,9 @@ export default async function HomePage() {
           <Kicker center>The house of Banaras</Kicker>
           <h2 className="display mt-3 text-[2rem] leading-tight sm:text-[2.75rem] lg:text-5xl">Three ways to <em className="text-peacock">wear the weave</em></h2>
         </div>
-        <div className="mt-8 grid gap-6 sm:grid-cols-3 sm:gap-5 lg:gap-8">
+        <div className="no-scrollbar -mx-4 mt-8 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4 sm:mx-0 sm:grid sm:grid-cols-3 sm:gap-5 sm:overflow-visible sm:px-0 lg:gap-8">
           {tiles.map((t) => (
-            <Link key={t.label} href={t.href} className="group block">
+            <Link key={t.label} href={t.href} className="group block w-[74%] shrink-0 snap-start sm:w-auto">
               <span className="cell relative block">
                 <Photo fit m={t.p!.media[0]} alt={`${t.label}: model wearing the ${t.p!.name}`} want={800}
                   sizes="(min-width: 640px) 31vw, 92vw" className="!rounded-none" />

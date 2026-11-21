@@ -15,10 +15,12 @@ function mix(items: Product[]) {
 
 export function DropGrid({ products }: { products: Product[] }) {
   const tabs = [
+    // Newest first: whatever the owner just added from the dashboard is the first thing shoppers see.
+    { slug: "new", label: "New in", items: [...products].sort((a, b) => Number(b.code) - Number(a.code)) },
     { slug: "featured", label: "Featured", items: mix(products.filter((p) => p.featured)) },
     ...categories.map((c) => ({ slug: c.slug as string, label: c.label as string, items: products.filter((p) => p.category === c.slug) })),
   ].filter((t) => t.items.length);
-  const [tab, setTab] = useState(tabs[0]?.slug ?? "featured");
+  const [tab, setTab] = useState(tabs[0]?.slug ?? "new");
   const [all, setAll] = useState(false);
   const active = tabs.find((t) => t.slug === tab) ?? tabs[0];
   if (!active) return <p className="py-10 text-muted">The next drop is being photographed. Check back on Friday.</p>;

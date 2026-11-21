@@ -1,3 +1,4 @@
+import { Empty } from "@/components/admin/Empty";
 import { listContacts, listOrders } from "@/lib/store";
 
 export default async function CustomersPage() {
@@ -5,9 +6,9 @@ export default async function CustomersPage() {
   const count = (phone: string) => orders.filter((o) => o.phone === phone && !["pending_payment", "cancelled"].includes(o.status)).length;
   return (
     <div>
-      <header><p className="label text-amber">People</p><h1 className="display mt-2 text-4xl sm:text-5xl">Customers</h1></header>
+      <header><p className="label text-amber">People</p><h1 className="display mt-1 text-[1.9rem] leading-tight sm:text-[2.15rem]">Customers</h1></header>
       <p className="mt-2 max-w-2xl text-sm text-muted">Marketing messages can go only to people marked "Opted in". Each opt-in keeps the time, the source and the exact words the person agreed to.</p>
-      {contacts.length === 0 && <p className="mt-10 text-muted">No customers yet.</p>}
+      {contacts.length === 0 && <Empty title="No customers yet" text="People appear here after their first order or when they opt in to new-drop messages." icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden><circle cx="9" cy="8.5" r="3.5" /><path d="M2.5 19.5a6.5 6.5 0 0 1 13 0M16 5.2a3.5 3.5 0 0 1 0 6.6M18.5 14.2a6.5 6.5 0 0 1 3 5.3" /></svg>} />}
       <ul className="mt-6 space-y-3">
         {contacts.map((c) => (
           <li key={c.phone} className="rounded-2xl border border-line/70 bg-white shadow-[0_1px_2px_rgb(0_0_0/0.03)] p-5 text-sm">

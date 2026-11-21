@@ -1,3 +1,4 @@
+import { Empty } from "@/components/admin/Empty";
 import Link from "next/link";
 import { inr } from "@/lib/format";
 import { nextStatus } from "@/lib/orders";
@@ -15,7 +16,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
   const orders = status ? all.filter((o) => o.status === status) : all;
   return (
     <div>
-      <header><p className="label text-amber">Fulfilment</p><h1 className="display mt-2 text-4xl sm:text-5xl">Orders</h1></header>
+      <header><p className="label text-amber">Fulfilment</p><h1 className="display mt-1 text-[1.9rem] leading-tight sm:text-[2.15rem]">Orders</h1></header>
       <nav aria-label="Filter by status" className="no-scrollbar mt-6 flex gap-2 overflow-x-auto">
         {tabs.map(([s, l]) => (
           <Link key={s} href={s ? `/admin/orders?status=${s}` : "/admin/orders"} aria-current={s === status ? "page" : undefined}
@@ -24,7 +25,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
           </Link>
         ))}
       </nav>
-      {orders.length === 0 && <p className="mt-10 text-muted">No orders here yet.</p>}
+      {orders.length === 0 && <Empty title="No orders here yet" text="Orders from the store and from WhatsApp land here, ready to pack and ship." action={{ href: "/", label: "View the store" }} icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M5 8h14l-1.2 11.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8z" /><path d="M9 8V6.5a3 3 0 0 1 6 0V8" /></svg>} />}
       <ul className="mt-6 space-y-4">
         {orders.map((o) => {
           const next = nextStatus[o.status];
@@ -39,7 +40,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
                   </p>
                   <p className="mt-1 text-sm text-muted">{new Date(o.createdAt).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })} · {o.slot}</p>
                 </div>
-                <p className="display text-3xl">{inr(o.total)}</p>
+                <p className="display text-2xl">{inr(o.total)}</p>
               </div>
               <div className="mt-4 grid gap-4 border-t border-line pt-4 text-sm md:grid-cols-2">
                 <ul className="space-y-2">

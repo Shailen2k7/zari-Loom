@@ -353,3 +353,68 @@ body {
     scroll-behavior: auto;
   }
 }
+
+/* ---------- Owner studio: upload, processing and going live ---------- */
+@property --a { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+@keyframes spin-angle { to { --a: 360deg; } }
+@keyframes pop-in { from { opacity: 0; transform: translateY(10px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes fade-up { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 rgb(233 162 59 / 0.55); } 100% { box-shadow: 0 0 0 12px rgb(233 162 59 / 0); } }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes burst { 0% { opacity: 1; transform: translate(0, 0) scale(1); } 100% { opacity: 0; transform: translate(var(--x), var(--y)) scale(0.3); } }
+@keyframes glow { 0%, 100% { opacity: 0.35; } 50% { opacity: 0.8; } }
+@keyframes float-up { 0% { opacity: 0; transform: translateY(14px) rotate(var(--r, 0deg)); } 15%, 80% { opacity: 1; } 100% { opacity: 0; transform: translateY(-26px) rotate(var(--r, 0deg)); } }
+@keyframes stripes { to { background-position: 28px 0; } }
+@keyframes caret { 50% { opacity: 0; } }
+
+/* Drop zone: a gold thread runs around the edge while you drag or while pieces are processing */
+.drop-ring { position: relative; isolation: isolate; }
+.drop-ring::before {
+  content: ""; position: absolute; inset: -2px; z-index: -1; border-radius: inherit; padding: 2px;
+  background: conic-gradient(from var(--a), transparent 0 70%, #e9a23b 85%, #f6d28e 92%, transparent 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  opacity: 0; transition: opacity 0.3s;
+}
+.drop-ring[data-live="true"]::before { opacity: 1; animation: spin-angle 3.2s linear infinite; }
+.pop-in { animation: pop-in 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.fade-up { animation: fade-up 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.pulse-ring { animation: pulse-ring 1.2s ease-out infinite; }
+.glow { animation: glow 2.4s ease-in-out infinite; }
+.float-up { animation: float-up 3.6s ease-in-out infinite both; }
+.caret::after { content: ""; display: inline-block; width: 2px; height: 0.9em; margin-left: 2px; vertical-align: -0.1em; background: currentColor; animation: caret 0.9s steps(1) infinite; }
+.progress-stripes {
+  background-image: linear-gradient(45deg, rgb(255 255 255 / 0.25) 25%, transparent 25%, transparent 50%, rgb(255 255 255 / 0.25) 50%, rgb(255 255 255 / 0.25) 75%, transparent 75%);
+  background-size: 28px 28px; animation: stripes 0.8s linear infinite;
+}
+.draw-check { stroke-dasharray: 40; stroke-dashoffset: 40; animation: draw 0.5s 0.15s cubic-bezier(0.6, 0, 0.2, 1) forwards; }
+.spark { position: absolute; left: 50%; top: 50%; width: 7px; height: 7px; margin: -3.5px; border-radius: 2px; background: #e9a23b; animation: burst 0.9s cubic-bezier(0.1, 0.7, 0.3, 1) forwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  .drop-ring[data-live="true"]::before, .pop-in, .fade-up, .pulse-ring, .glow, .float-up, .progress-stripes, .spark, .ai-scan, .shimmer { animation: none; }
+  .draw-check { animation: none; stroke-dashoffset: 0; }
+}
+
+/* The owner studio is a work tool: slightly denser fields than the shop. */
+.admin .field:not(textarea) { height: 42px; min-height: 42px; }
+.admin .btn { min-height: 42px; padding: 0.55rem 1.25rem; font-size: 0.875rem; }
+@keyframes drop-bob { 0%, 100% { transform: translateY(-1.5px); } 50% { transform: translateY(1.5px); } }
+.drop-bob { animation: drop-bob 2.4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .drop-bob { animation: none; } }
+.drop-veil { background: rgb(246 243 236 / 0.72); backdrop-filter: blur(6px); animation: fade-in 0.18s ease-out both; }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .drop-veil { animation: none; } }
+
+/* Horizontal rails line their first card up with the page text, and snap to the same edge. */
+.rail { --rail: 1rem; padding-inline: var(--rail); scroll-padding-inline: var(--rail); }
+@media (min-width: 640px) { .rail { --rail: 1.5rem; } }
+@media (min-width: 1024px) { .rail { --rail: max(2.5rem, calc((100% - 1280px) / 2 + 2.5rem)); } }
+
+/* A photo that is not the frame's shape sits on a soft, blurred copy of itself instead of a flat band. Never cropped. */
+.fit-fill {
+  position: absolute; inset: -12%; width: 124%; height: 124%;
+  object-fit: cover; filter: blur(22px) saturate(1.1); opacity: 0.55; transform: scale(1.05);
+  pointer-events: none;
+}
+.fade-in { animation: fade-in 0.35s ease-out both; }
+@media (prefers-reduced-motion: reduce) { .fade-in { animation: none; } }

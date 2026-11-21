@@ -17,7 +17,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   };
   const [a, b] = site.brand.split("&").map((s) => s.trim());
   return (
-    <div className="min-h-screen bg-[#f5f4ef] lg:grid lg:grid-cols-[260px_1fr]">
+    <div className="admin min-h-screen bg-[#f5f4ef] lg:grid lg:grid-cols-[240px_1fr]">
       <aside className="on-dark hidden bg-deep text-cream lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col lg:px-4 lg:py-7">
         <Link href="/admin" className="px-3.5">
           <span className="display block text-[1.7rem] leading-none">{a} <em className="text-marigold">&amp;</em> {b}</span>
@@ -42,7 +42,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <Link href="/admin" className="display text-xl">{a} <em className="text-marigold">&amp;</em> {b}</Link>
           <form action={logout}><button className="min-h-10 px-2 text-sm text-cream/80">Sign out</button></form>
         </header>
-        <main id="main" className="mx-auto max-w-[1400px] px-4 pb-28 pt-6 sm:px-8 lg:pb-14 lg:pt-10">
+        <main id="main" className="mx-auto max-w-[1400px] px-4 pb-28 pt-5 sm:px-6 lg:px-8 lg:pb-12 lg:pt-7">
           {!usingSupabase && (
             <p className="mb-7 flex items-start gap-3 rounded-xl border border-marigold/50 bg-marigold/10 px-4 py-3 text-sm">
               <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-marigold" />
